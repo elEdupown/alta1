@@ -1,51 +1,60 @@
-import Link from "next/link"
-import React from "react"
-import { useEffect, useState } from "react"
-import getCards from "../services/getCards"
-import getCard from "../services/getCard"
+import Link from "next/link";
+import React from "react";
+import { useEffect, useState } from "react";
+import CardSection from "../components/CardSection";
+import getCards from "../services/getCards";
 
-export default function Index(){
-    const [cards, setCards] = useState([])
-    useEffect(() => {
-        getCards().then((data) => {
-            setCards(data)
-        })
-    }, [])
-    // console.log(cards)
-    return <div>
-        <h2>Commons</h2>
-        <ul>
-        {cards.filter(card=>card.rarity=="Common").map((card) => {
-            return <Link href="./cards"><li key={card.id}>{card.name}</li></Link>
-        })}
-        </ul>
+const categories = [
+  {
+    title: "Commons",
+    id: "commons",
+    rarityName: "Common",
+  },
+  {
+    title: "Rares",
+    id: "rares",
+    rarityName: "Rare",
+  },
+  {
+    title: "Epic",
+    id: "epic",
+    rarityName: "Epic",
+  },
+  {
+    title: "Legendary",
+    id: "legendary",
+    rarityName: "Legendary",
+  },
+  {
+    title: "Champions",
+    id: "champions",
+    rarityName: "Champion",
+  },
+];
 
-        <h2>Rares</h2>
-        <ul>
-        {cards.filter(card=>card.rarity=="Rare").map((card) => {
-            return <li key={card.id}>{card.name}</li>
-        })}
-        </ul>
-
-        <h2>Epic</h2>
-        <ul>
-        {cards.filter(card=>card.rarity=="Epic").map((card) => {
-            return <li key={card.id}>{card.name}</li>
-        })}
-        </ul>
-
-        <h2>Legendary</h2>
-        <ul>
-        {cards.filter(card=>card.rarity=="Legendary").map((card) => {
-            return <li key={card.id}>{card.name}</li>
-        })}
-        </ul>
-
-        <h2>Champions</h2>
-        <ul>
-        {cards.filter(card=>card.rarity=="Champion").map((card) => {
-            return <li key={card.id}>{card.name}</li>
-        })}
-        </ul>
+export default function Index() {
+  const [cards, setCards] = useState([] as Card[]);
+  useEffect(() => {
+    getCards().then((data) => {
+      setCards(data);
+    });
+  }, []);
+  return (
+    <div>
+      <h1>Clash Royale Cards</h1>
+      {categories.map((category) => {
+        return (
+          <div key={category.id}>
+            <h2>{category.title}</h2>
+            <CardSection 
+              cards={
+                cards
+                .filter((card) => card.rarity === category.rarityName)
+              } 
+            />
+          </div>
+        );
+      })}
     </div>
+  );
 }

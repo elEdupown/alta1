@@ -1,5 +1,4 @@
-import { MongoClient, ServerApiVersion } from 'mongodb'
-import { doesNotMatch } from 'assert';
+import { MongoClient } from 'mongodb'
 
 const uri = process.env.MONGO_URI as string;
 const client = new MongoClient(uri);

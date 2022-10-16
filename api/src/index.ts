@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-//import { json } from 'body-parser';
 import {client} from './connect.js';
 
 // Create a new express app instance
@@ -19,16 +18,33 @@ app.get('/review/:id', async (req, res) => {
     }
 })
 
+// get all reviews
+app.get('/reviews', async (req, res) => {
+    console.log(req.query)
+    try {
+        if (!req.query.card_id) {
+            const result = await client.db('cards').collection('reviews').find().toArray()
+            return res.json(result);
+        }
+        const result = await client.db('cards').collection('reviews').find({cardId: +req.query.card_id}).toArray()
+        res.json(result)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({error: (error as Error).message})
+    }
+});
+
+
 // Create new review
 app.post('/review', async (req, res) => {
-    const {id, review} = req.body
-    if (!id || !review) {
-        res.status(400).json({error: 'id and review are required'})
-        return
+    const {review, cardId, timestamp} = req.body
+    if (!review || !cardId || !timestamp) {
+        res.status(400).json({error: 'cardId, timestamp and review are required'})
+        return;
     }
     try {
-        await client.db('cards').collection('reviews').insertOne({id, review})
-        res.status(201).send('Review added')
+        await client.db('cards').collection('reviews').insertOne({cardId, review, timestamp})
+        res.status(201).json({message: 'Review added'})
     } catch (error) {
         res.status(500).json({error: (error as Error).message})
     }
@@ -76,7 +92,7 @@ app.post('/card', async (req,res)=>{
         await client.db('cards').collection('cards').insertOne({key, name, sc_key, elixir, type, rarity, arena, description, id})
         
         // devolver un mensaje de exito
-        res.send('Card added')
+        res.json({message: 'Card added'})
     } catch (error) {
         res.send(error)
     }
@@ -142,4 +158,6 @@ app.put('/cards', async (req,res)=>{
     // devolver un mensaje de exito
 })
 
-app.listen(3000,() => {console.log('listening in port 3000')})
+const PORT = process.env.PORT || 80
+
+app.listen(PORT, () => {console.log(`listening in port ${PORT}`)})
