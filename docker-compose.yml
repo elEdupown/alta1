@@ -22,12 +22,9 @@ services:
     volumes:
       - ./api/src:/app/src
   
-  # frontend:
-  #   build: ./web
-  #   ports:
-  #     - 8080:80
-  #   depends_on:
-  #     - backend
-  #   env_file: ./frontend/.env
-  #   volumes:
-  #     - ./frontend/src:/app/src
+  frontend:
+    build: ./web
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
