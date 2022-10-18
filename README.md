@@ -1,5 +1,5 @@
 # Aquitecturas de alta disponibilidad
-
+*Eduardo Gálvez y Rodrigo Álvarez*
 ### Aplicación
 Esta aplicación consiste en 3 frentes, una base de datos Mongo, un backend hecho con Express y Typescript, y un frontend simple hecho con NextJS
 
