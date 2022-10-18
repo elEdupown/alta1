@@ -1,4 +1,9 @@
-# wena
+# Aquitecturas de alta disponibilidad
+
+### Aplicación
+Esta aplicación consiste en 3 frentes, una base de datos Mongo, un backend hecho con Express y Typescript, y un frontend simple hecho con NextJS
+
+### Funcionamiento
 Primero que todo se debe crear un archivo `.env` dentro de la carpeta api y la carpeta web.
 EL interior de estas serán lo que está en `.env.example`
 
