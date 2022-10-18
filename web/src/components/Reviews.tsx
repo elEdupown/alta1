@@ -1,27 +1,22 @@
-import styled from "@emotion/styled";
+import deleteReview from "../services/deleteReview";
+import Review from "./Review";
 
-const StyledReview = styled.div({
-  background: '#efefef',
-  display: 'flex',
-  flexDirection: 'column',
-  padding: '0 10px',
-  margin: '5px 0',
-  '& > small': {
-    alignSelf: 'flex-end',
-  }
-})
+type ReviewsProps = {
+  reviews: Review[];
+  onDelete: (id: string) => void;
+};
 
-export default function Reviews({reviews}:{reviews: Review[]}) {
+export default function Reviews({ reviews, onDelete }: ReviewsProps) {
+  const handleDelete = (id: string) => () => {
+    deleteReview(id);
+    onDelete(id);
+  };
+
   return (
     <>
-    {
-      reviews.map((review) => (
-        <StyledReview key={review._id}>
-          <p>{review.review}</p>
-          <small>{new Date(review.timestamp).toUTCString()}</small>
-        </StyledReview>
-      ))
-    }
+      {reviews.map((review) => (
+        <Review key={review._id} handleDelete={handleDelete} review={review} />
+      ))}
     </>
   );
 }

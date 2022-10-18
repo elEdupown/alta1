@@ -22,3 +22,17 @@ type CardQuery = {
   cardData: Card; 
   reviews: Review[] 
 };
+
+type CreateReviewRes = {
+  acknowledged: boolean;
+  insertedId: string;
+  message: string;
+};
+
+type UpdateReviewRes = {
+  acknowledged: boolean;
+  modifiedCount: number;
+  upsertedId: string | null;
+  upsertedCount: number;
+  matchedCount: number;
+};
