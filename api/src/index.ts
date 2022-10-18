@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import {client} from './connect.js';
+import {client, ObjectId} from './connect.js';
 
 // Create a new express app instance
 const app = express();
@@ -43,8 +43,8 @@ app.post('/review', async (req, res) => {
         return;
     }
     try {
-        await client.db('cards').collection('reviews').insertOne({cardId, review, timestamp})
-        res.status(201).json({message: 'Review added'})
+        const dbRes = await client.db('cards').collection('reviews').insertOne({cardId, review, timestamp})
+        res.status(201).json({message: 'Review added', ...dbRes})
     } catch (error) {
         res.status(500).json({error: (error as Error).message})
     }
@@ -57,8 +57,8 @@ app.put('/review', async (req, res) =>{
         return
     }
     try {
-        await client.db('cards').collection('reviews').updateOne({id: id}, {$set: {review: review}})
-        res.status(201).send('Review updated')
+        const dbRes = await client.db('cards').collection('reviews').updateOne({_id: new ObjectId(id)}, {$set: {review: review}})
+        res.status(201).json(dbRes);
     } catch (error) {
         res.status(500).json({error: (error as Error).message})
     }
@@ -66,8 +66,8 @@ app.put('/review', async (req, res) =>{
 // delete a review
 app.delete('/review/:id', async (req, res) => {
     try {
-        await client.db('cards').collection('reviews').deleteOne({id: +req.params.id})
-        res.status(201).send('Review deleted')
+        const dbRes = await client.db('cards').collection('reviews').deleteOne({_id: new ObjectId(req.params.id)})
+        res.status(201).json(dbRes)
     } catch (error) {
         res.status(500).json({error: (error as Error).message})
     }
